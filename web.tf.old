@@ -1,0 +1,63 @@
+resource "aws_instance" "web" {
+  ami                    = "ami-0aff18ec83b712f05"
+  instance_type          = "t2.micro"
+  key_name               = "ec2_keypair"
+  vpc_security_group_ids = [aws_security_group.instance.id]
+  user_data              = <<-EOF
+            #!/bin/bash
+
+            # Install SSM Agent
+            apt install -y amazon-ssm-agent
+            systemctl start amazon-ssm-agent
+            systemctl enable amazon-ssm-agent
+
+            # Install and start NGINX
+            apt install -y nginx
+            systemctl start nginx
+            systemctl enable nginx
+
+            # Create a simple index.html file
+            echo "<!DOCTYPE html>
+            <html>
+            <head>
+                <title>Welcome to My DevOps Training World</title>
+            </head>
+            <body>
+                <h1>Disclaimer! If you trespass, you goin learn the hard way.</h1>
+            </body>
+            </html>" > /var/www/html/index.nginx-debian.html
+
+            # Restart NGINX to load the new index.html
+            systemctl restart nginx
+            EOF
+
+  user_data_replace_on_change = true
+
+  tags = {
+    Name = "Web Server"
+  }
+}
+resource "aws_security_group" "instance" {
+  name = "webserver-security-group"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["68.134.141.81/32"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
