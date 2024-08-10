@@ -7,7 +7,7 @@ on:
     inputs:
       tfpath:
         description: 'TF File Path'     
-        required: false
+        required: true
         default: 'iam-s3-cloudfront'
   push:
     branches: [ "*" ]
