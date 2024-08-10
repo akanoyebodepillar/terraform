@@ -1,0 +1,29 @@
+# Ignore Terraform state files and backups
+*.tfstate
+*.tfstate.*
+
+# Ignore crash logs
+crash.log
+
+# Ignore Terraform plan files
+*.tfplan
+
+# Ignore .terraform directory (which contains downloaded providers, modules, etc.)
+.terraform/
+
+# Specifically ignore the provider binary for AWS version 5.62.0 on Windows
+iam-s3-cloudfront/.terraform/providers/registry.terraform.io/hashicorp/aws/5.62.0/windows_amd64/terraform-provider-aws_v5.62.0_x5.exe
+
+# Ignore any other binaries in the .terraform directory
+*.exe
+*.zip
+
+# Ignore override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore sensitive variable files
+*.tfvars
+*.tfvars.json
