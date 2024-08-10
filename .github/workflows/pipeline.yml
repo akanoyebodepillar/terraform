@@ -10,9 +10,9 @@ on:
         required: false
         default: 'iam-s3-cloudfront'
   push:
-    branches: [ * ]
+    branches: [ "*" ]
   pull_request:
-    branches: [ * ]
+    branches: [ "*" ]
 
 jobs:
   tf_code_check:
