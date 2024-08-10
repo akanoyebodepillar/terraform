@@ -8,7 +8,8 @@ on:
       tfpath:
         description: 'TF File Path'     
         required: true
-        default: 'iam-s3-cloudfront'
+        default: 'terraform/iam-s3-cloudfront'
+        
   push:
     branches: [ "*" ]
   pull_request:
