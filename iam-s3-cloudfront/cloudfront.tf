@@ -1,13 +1,16 @@
 #Create a CloudFront distribution with the S3 bucket as the origin. Configure default cache behavior and viewer protocol policy.
 
-# Fetching S3 Bucket Data
-data "aws_s3_bucket" "s3_bucket" {
+# Creating S3 Bucket
+resource "aws_s3_bucket" "storybook_bucket" {
   bucket = "empirestorybook"
+  acl    = "private"
 }
+
+
 
 # Creating CloudFront Origin Access Control
 resource "aws_cloudfront_origin_access_control" "storybook" {
-  name                        = "S3-${data.aws_s3_bucket.s3_bucket.id}"
+  name                        = "S3-${aws_s3_bucket.storybook_bucket.id}"
   origin_access_control_origin_type = "s3"
   signing_behavior            = "always"
   signing_protocol            = "sigv4"
@@ -16,8 +19,8 @@ resource "aws_cloudfront_origin_access_control" "storybook" {
 # Creating CloudFront Distribution
 resource "aws_cloudfront_distribution" "example_distribution" {
   origin {
-    domain_name = data.aws_s3_bucket.s3_bucket.bucket_regional_domain_name
-    origin_id   = "S3-${data.aws_s3_bucket.s3_bucket.id}"
+    domain_name = aws_s3_bucket.storybook_bucket.bucket_regional_domain_name
+    origin_id   = "S3-${aws_s3_bucket.storybook_bucket.id}"
     origin_access_control_id = aws_cloudfront_origin_access_control.storybook.id
   }
 
@@ -27,7 +30,7 @@ resource "aws_cloudfront_distribution" "example_distribution" {
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "S3-${data.aws_s3_bucket.s3_bucket.id}"
+    target_origin_id = "S3-${aws_s3_bucket.storybook_bucket.id}"
 
     forwarded_values {
       query_string = false
@@ -55,7 +58,7 @@ resource "aws_cloudfront_distribution" "example_distribution" {
 
 # Granting CloudFront Access to S3 Bucket
 resource "aws_s3_bucket_policy" "example_bucket_policy" {
-  bucket = data.aws_s3_bucket.s3_bucket.bucket
+  bucket = aws_s3_bucket.storybook_bucket.bucket
 
   policy = <<EOF
 {
@@ -67,7 +70,7 @@ resource "aws_s3_bucket_policy" "example_bucket_policy" {
         "Service": "cloudfront.amazonaws.com"
       },
       "Action": "s3:GetObject",
-      "Resource": "${data.aws_s3_bucket.s3_bucket.arn}/*"
+      "Resource": "${aws_s3_bucket.storybook_bucket.arn}/*"
     }
   ]
 }

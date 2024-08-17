@@ -1,10 +1,6 @@
 #Create a private S3 bucket named "storybook".
 
-# Creating S3 Bucket
-resource "aws_s3_bucket" "storybook_bucket" {
-  bucket = "empirestorybook"
-  acl    = "private"
-}
+
 
 
 resource "aws_s3_bucket" "storybookpublic_bucket" {
