@@ -2,7 +2,7 @@
 
 # Fetching S3 Bucket Data
 data "aws_s3_bucket" "s3_bucket" {
-  bucket = "storybook"
+  bucket = "empirestorybook"
 }
 
 # Creating CloudFront Origin Access Control
