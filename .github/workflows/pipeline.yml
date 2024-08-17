@@ -89,8 +89,8 @@ jobs:
         cat tfplan
         echo "tfpath ${{ github.event.inputs.tfpath || 'iam-s3-cloudfront' }}"        
         echo "** Running Terraform Apply**"
-        terraform apply ${{ github.event.inputs.tfpath || 'iam-s3-cloudfront' }}/tfplan
-      working-directory: ${{ github.event.inputs.tfpath || 'iam-s3-cloudfront' }}
+        terraform apply tfplan
+     
 
   tf_destroy:
     name: Terraform Destroy
