@@ -115,5 +115,6 @@ jobs:
     - name: Terraform Destroy
       run: |
         echo "** Running Terraform Destroy**"
+        terraform init
         terraform destroy
       working-directory: ${{ github.event.inputs.tfpath || 'iam-s3-cloudfront' }}
