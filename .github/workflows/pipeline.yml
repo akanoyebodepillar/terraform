@@ -1,13 +1,20 @@
 name: Terraform AWS Workflow
 
 on:
-  workflow_call:
   workflow_dispatch:
     inputs:
       tfpath:
-        description: 'TF File Path'     
+        description: 'TF File Path'
         required: false
         default: 'iam-s3-cloudfront'
+      action:
+        description: 'Action to perform'
+        required: true
+        type: choice
+        options:
+          - apply
+          - destroy
+        default: 'apply'
   push:
     branches: ['*']
   pull_request:
@@ -61,6 +68,7 @@ jobs:
     name: Terraform Apply
     runs-on: ubuntu-latest
     needs: tf_plan
+    if: ${{ github.event.inputs.action == 'apply' }}
 
     steps:
     - name: Checkout tf code in runner environment
@@ -96,7 +104,8 @@ jobs:
   tf_destroy:
     name: Terraform Destroy
     runs-on: ubuntu-latest
-    needs: tf_apply
+    needs: tf_plan
+    if: ${{ github.event.inputs.action == 'destroy' }}
 
     steps:
     - name: Checkout tf code in runner environment
