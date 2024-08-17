@@ -89,6 +89,7 @@ jobs:
         cat tfplan
         echo "tfpath ${{ github.event.inputs.tfpath || 'iam-s3-cloudfront' }}"        
         echo "** Running Terraform Apply**"
+        terraform init
         terraform apply tfplan
       working-directory: ${{ github.event.inputs.tfpath || 'iam-s3-cloudfront' }}
 
